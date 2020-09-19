@@ -4,9 +4,7 @@
 
 此项目是完成开源的lwgps与rt-thread的匹配。
 
-原工程地址：
-
-[lwgps]: https://github.com/MaJerle/lwgps
+原工程地址：[https://github.com/MaJerle/lwgps](https://github.com/MaJerle/lwgps)
 
 ## 1.1 许可证
 
@@ -36,7 +34,7 @@ RT-Thread online packages
 
 然后让 RT-Thread 的包管理器自动更新，或者使用 `pkgs --update` 命令更新包到 BSP 中。
 
-## 3、联系方式 & 感谢
+# 3、联系方式 & 感谢
 
 * 维护：orange2348
 * 主页：<https://github.com/orange2348>

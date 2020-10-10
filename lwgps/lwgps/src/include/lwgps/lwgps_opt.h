@@ -34,6 +34,8 @@
 #ifndef LWGPS_HDR_OPT_H
 #define LWGPS_HDR_OPT_H
 
+#include <rtconfig.h>
+
 #define LWGPS_IGNORE_USER_OPTS
 /* Include application options */
 #ifndef LWGPS_IGNORE_USER_OPTS

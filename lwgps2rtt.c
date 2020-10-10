@@ -27,7 +27,7 @@
 #define GPS_MODULE_BAUD_RATE        BAUD_RATE_9600
 #endif
 
-static lwgps_t hgps;
+static lwgps_t h_lwgps;
 
 static rt_device_t serial = RT_NULL;
 static struct rt_semaphore rx_sem;
@@ -71,9 +71,9 @@ static void lwgps_thread_entry(void *parameter)
         {
             rt_mutex_take(lwgps_mutex, RT_WAITING_FOREVER);
 #if LWGPS_CFG_STATUS == 1
-            lwgps_process(&hgps, &ch, 1, lwgps_process_cbk);
+            lwgps_process(&h_lwgps, &ch, 1, lwgps_process_cbk);
 #else
-            lwgps_process(&hgps, &ch, 1);
+            lwgps_process(&h_lwgps, &ch, 1);
 #endif
             rt_mutex_release(lwgps_mutex);
         }
@@ -107,7 +107,7 @@ void lwgps2rtt_init(const char *uart_dev_name)
     config.parity    = PARITY_NONE;
     rt_device_control(serial, RT_DEVICE_CTRL_CONFIG, &config);
 
-    lwgps_init(&hgps);
+    lwgps_init(&h_lwgps);
 
     lwgps_tid = rt_thread_create("lwgps", lwgps_thread_entry, RT_NULL, 512, 20, 4);
     if (lwgps_tid != RT_NULL)
@@ -122,7 +122,7 @@ void lwgps2rtt_init(const char *uart_dev_name)
 void lwgps2rtt_get_gps_info(lwgps_t *gps_info)
 {
     rt_mutex_take(lwgps_mutex, RT_WAITING_FOREVER);
-    rt_memcpy(gps_info, &hgps, (sizeof(hgps) - sizeof(hgps.p)));
+    rt_memcpy(gps_info, &h_lwgps, (sizeof(h_lwgps) - sizeof(h_lwgps.p)));
     rt_mutex_release(lwgps_mutex);
 }
 

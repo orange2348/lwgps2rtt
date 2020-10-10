@@ -2,6 +2,9 @@
  * This example uses direct processing function
  * to process dummy NMEA data from GPS receiver
  */
+#ifdef LWGPS_USING_SAMPLES
+
+#include <rtthread.h>
 #include <string.h>
 #include <stdio.h>
 #include "lwgps/lwgps.h"
@@ -29,8 +32,8 @@ gps_rx_data[] = ""
                 "$GPRMC,183731,A,3907.482,N,12102.436,W,000.0,360.0,080301,015.5,E*67\r\n"
                 "$GPRMB,A,,,,,,,,,,,,V*71\r\n";
 
-int
-main() {
+void
+lwgps_example(int argc, char *argv[]) {
     /* Init GPS */
     lwgps_init(&hgps);
 
@@ -38,10 +41,12 @@ main() {
     lwgps_process(&hgps, gps_rx_data, strlen(gps_rx_data));
 
     /* Print messages */
-    printf("Valid status: %d\r\n", hgps.is_valid);
-    printf("Latitude: %f degrees\r\n", hgps.latitude);
-    printf("Longitude: %f degrees\r\n", hgps.longitude);
-    printf("Altitude: %f meters\r\n", hgps.altitude);
+    rt_kprintf("Valid status: %d\r\n", hgps.is_valid);
+    rt_kprintf("Latitude: %f degrees\r\n", hgps.latitude);
+    rt_kprintf("Longitude: %f degrees\r\n", hgps.longitude);
+    rt_kprintf("Altitude: %f meters\r\n", hgps.altitude);
 
     return 0;
 }
+MSH_CMD_EXPORT(lwgps_example, lwgps simple example);
+#endif

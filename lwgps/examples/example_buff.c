@@ -1,3 +1,6 @@
+#ifdef LWGPS_USING_SAMPLES
+
+#include <rtthread.h>
 #include "lwgps/lwgps.h"
 #include "lwrb/lwrb.h"
 #include <string.h>
@@ -32,8 +35,8 @@ gps_rx_data[] = ""
 static size_t write_ptr;
 static void uart_irqhandler(void);
 
-int
-main() {
+void
+lwgps_exampe_buff(int argc, char *argv[]) {
     uint8_t rx;
 
     /* Init GPS */
@@ -55,9 +58,9 @@ main() {
             }
         } else {
             /* Print all data after successful processing */
-            printf("Latitude: %f degrees\r\n", hgps.latitude);
-            printf("Longitude: %f degrees\r\n", hgps.longitude);
-            printf("Altitude: %f meters\r\n", hgps.altitude);
+            rt_kprintf("Latitude: %f degrees\r\n", hgps.latitude);
+            rt_kprintf("Longitude: %f degrees\r\n", hgps.longitude);
+            rt_kprintf("Altitude: %f meters\r\n", hgps.altitude);
             break;
         }
     }
@@ -79,3 +82,6 @@ uart_irqhandler(void) {
         ++write_ptr;
     }
 }
+
+MSH_CMD_EXPORT(lwgps_exampe_buff, lwgps example use buffer);
+#endif

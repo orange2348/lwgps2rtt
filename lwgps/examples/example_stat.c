@@ -2,6 +2,9 @@
  * This example tests the callback functionality of lwgps_process()
  * when the LWGPS_CFG_STATUS flag is set.
  */
+#ifdef LWGPS_USING_SAMPLES
+
+#include <rtthread.h>
 #include <string.h>
 #include <stdio.h>
 #include "lwgps/lwgps.h"
@@ -57,7 +60,7 @@ callback(lwgps_statement_t res) {
     static int i;
 
     if (res != expected[i]) {
-        printf("failed i %d, expected res %d but received %d\n",
+        rt_kprintf("failed i %d, expected res %d but received %d\n",
                i, expected[i], res);
         ++err_cnt;
     }
@@ -66,7 +69,7 @@ callback(lwgps_statement_t res) {
 }
 
 int
-main() {
+lwgps_example_stat(int argc, char *argv[]) {
     /* Init GPS */
     lwgps_init(&hgps);
 
@@ -75,3 +78,6 @@ main() {
 
     return err_cnt;
 }
+
+MSH_CMD_EXPORT(lwgps_exampe_stat, lwgps example use callback functionality of lwgps_process());
+#endif

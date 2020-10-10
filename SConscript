@@ -8,7 +8,12 @@ src = []
 inc = [cwd]
 
 inc = inc + [cwd + "/lwgps/lwgps/src/include"]
-src = src + ["/lwgps/lwgps/src/lwgps/lwgps.c"]
+inc = inc + [cwd + "/lwgps/lwgps/src/include/lwgps"]
+src += Glob("lwgps/lwgps/src/lwgps/*.c")
+src += Glob("*.c")
+
+if GetDepend('LWGPS_USING_SAMPLES'):
+    src    += Glob('lwgps/examples/*.c')
 
 group = DefineGroup('lwgps', src, depend = ['PKG_USING_LWGPS'], CPPPATH = inc)
 

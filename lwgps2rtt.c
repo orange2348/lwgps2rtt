@@ -7,6 +7,7 @@
 // 2020/09/05           Cheney      First draft version
 // 2020/09/13           Cheney      1. Update the comments.
 //                                  2. Support gps info query interface.
+// 2020/10/10           Cheney      Support macros LWGPS_CFG_STATUS
 //
 //*****************************************************************************
 
@@ -46,6 +47,13 @@ static rt_err_t uart_input(rt_device_t dev, rt_size_t size)
     return RT_EOK;
 }
 
+#if LWGPS_CFG_STATUS == 1
+void lwgps_process_cbk(lwgps_statement_t res) 
+{
+    // TODO: give the interface to user.
+}
+#endif
+
 /**
  * \brief lwgps process thread
  *
@@ -62,7 +70,11 @@ static void lwgps_thread_entry(void *parameter)
         while (rt_device_read(serial, -1, &ch, 1) == 1)
         {
             rt_mutex_take(lwgps_mutex, RT_WAITING_FOREVER);
+#if LWGPS_CFG_STATUS == 1
+            lwgps_process(&hgps, &ch, 1, lwgps_process_cbk);
+#else
             lwgps_process(&hgps, &ch, 1);
+#endif
             rt_mutex_release(lwgps_mutex);
         }
     }

@@ -2,12 +2,13 @@
  * This example tests the callback functionality of lwgps_process()
  * when the LWGPS_CFG_STATUS flag is set.
  */
-#ifdef LWGPS_USING_SAMPLES
-
 #include <rtthread.h>
 #include <string.h>
 #include <stdio.h>
 #include "lwgps/lwgps.h"
+
+#ifdef LWGPS_USING_SAMPLES
+#if LWGPS_CFG_STATUS == 1
 
 #if !LWGPS_CFG_STATUS
 #error "this test must be compiled with -DLWGPS_CFG_STATUS=1"
@@ -68,16 +69,16 @@ callback(lwgps_statement_t res) {
     ++i;
 }
 
-int
+void
 lwgps_example_stat(int argc, char *argv[]) {
     /* Init GPS */
     lwgps_init(&hgps);
 
     /* Process all input data */
     lwgps_process(&hgps, gps_rx_data, strlen(gps_rx_data), callback);
-
-    return err_cnt;
+    rt_kprintf("error count is %d\r\n", err_cnt);
 }
 
-MSH_CMD_EXPORT(lwgps_exampe_stat, lwgps example use callback functionality of lwgps_process());
+MSH_CMD_EXPORT(lwgps_example_stat, lwgps example use callback functionality of lwgps_process());
+#endif
 #endif

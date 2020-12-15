@@ -8,6 +8,7 @@
 // 2020/09/13           Cheney      1. Update the comments.
 //                                  2. Support gps info query interface.
 // 2020/10/10           Cheney      Support macros LWGPS_CFG_STATUS
+// 2020/12/15           Cheney      Configure the uart before using it.
 //
 //*****************************************************************************
 
@@ -94,18 +95,18 @@ void lwgps2rtt_init(const char *uart_dev_name)
         return;
     }
 
-    lwgps_mutex = rt_mutex_create("lwgps_mutex", RT_IPC_FLAG_FIFO);
-
-    rt_sem_init(&rx_sem, "rx_sem", 0, RT_IPC_FLAG_FIFO);
-    rt_device_open(serial, RT_DEVICE_FLAG_INT_RX);
-    rt_device_set_rx_indicate(serial, uart_input);
-
     struct serial_configure config = RT_SERIAL_CONFIG_DEFAULT;
     config.baud_rate = GPS_MODULE_BAUD_RATE;
     config.data_bits = DATA_BITS_8;
     config.stop_bits = STOP_BITS_1;
     config.parity    = PARITY_NONE;
     rt_device_control(serial, RT_DEVICE_CTRL_CONFIG, &config);
+
+    lwgps_mutex = rt_mutex_create("lwgps_mutex", RT_IPC_FLAG_FIFO);
+
+    rt_sem_init(&rx_sem, "rx_sem", 0, RT_IPC_FLAG_FIFO);
+    rt_device_open(serial, RT_DEVICE_FLAG_INT_RX);
+    rt_device_set_rx_indicate(serial, uart_input);
 
     lwgps_init(&h_lwgps);
 
